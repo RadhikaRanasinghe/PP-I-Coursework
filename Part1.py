@@ -19,29 +19,29 @@ print(bottom_left_corner+horizontal*100+bottom_right_corner)
 print()
 
 
-def user_inputs():
-    global passed_credits,deferred_credits,failed_credits,total_credits,values_approved
-    #Taking user inputs for the credit values
-    passed_credits = int(input("Enter the number of credits you have passed (Including condoned passes)\t:"))
-    print()
-    deferred_credits = int(input("Enter the number of credits you have defered\t\t\t\t:"))
-    print()
-    failed_credits = int(input("Enter the number of credits you have failed\t\t\t\t:"))
+def user_inputs():#Functions to take inputs and count the number of students' credits are entered
+    global student_count,passed_credits,deferred_credits,failed_credits,values_approved
+    #All three credits category inputs are taken from the user
+    passed_credits = int(input("Enter the number of credits student has passed (Including condoned passes)\t:"))
+    deferred_credits = int(input("Enter the number of credits student has defered\t\t\t\t\t:"))
+    failed_credits = int(input("Enter the number of credits student has failed\t\t\t\t\t:"))
     print()
     print()
     total_credits = (passed_credits + deferred_credits + failed_credits)
-    if total_credits == 120:
+    if total_credits ==120: #Checking if the total of the scores entered are equal to 120 if not user has to input again
         if passed_credits % 20 == 0 and deferred_credits % 20 == 0 and failed_credits % 20 == 0:
-            values_approved = True
+            #Checking if the values entered are divisible by 20 if not user has to input again
+            values_approved = True #If both of the conditions are true, values are approved for processing
+            student_count += 1
         else: 
-            print("Range Error! Please enter correct credits values.")
+            print("Range Error! Please enter correct credits values.")#Divisible by 20 condition has become false
             print()
             user_inputs()
     else:
-        print("Total Error! Please enter correct credits values which sums upto 120.")
+        print("Total Error! Please enter correct credits values which sums upto 120.")#Total of 120 condition has become false
         print()
         user_inputs()
-    return passed_credits,deferred_credits,failed_credits,total_credits,values_approved
+    return student_count,passed_credits,deferred_credits,failed_credits,values_approved
     
 def progress_outcome():
     print(top_left_corner+horizontal*74+top_right_corner)
