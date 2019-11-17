@@ -21,7 +21,7 @@ right_junction = "\u2563"
 left_junction = "\u2560"
 
 print(top_left_corner+horizontal*100+top_right_corner)
-print(vertical+"                P R O G R E S S I O N   O U T C O M E S  :  S T A F F  V E R S I O N                "+vertical)
+print(vertical+"     P R O G R E S S I O N   O U T C O M E S  :  S T A F F  V E R S I O N   ( V E R T I C A L )     "+vertical)
 print(bottom_left_corner+horizontal*100+bottom_right_corner)
 print()
 
@@ -63,7 +63,7 @@ def add_or_exit_menu():#Giving user the option of choosing to add another studen
             keypress = str(input("Enter 'Q' to quit or 'N' to add another student\t\t\t\t\t:"))
             add_or_exit_menu()
 
-def progress_outcome():
+def progress_outcome():#Student's progress outcome prediction is printed on the console
     global progress_count,trailing_count,retriver_count,excluded_count,keypress,student_count
     if passed_credits == 120: #Students who has passed all credits will progress
         print("\t\tProgression outcome of student",student_count,":\tProgress")
@@ -82,10 +82,10 @@ def progress_outcome():
         print()
         excluded_count +=1
     print()
-    keypress = str(input("Enter 'Q' to quit or 'N' to add another student\t\t\t\t\t:"))
+    keypress = str(input("Enter 'Q' to quit or 'N' to add another student\t\t\t\t\t:"))#User input for adding another student/Histogram
     return progress_count, retriver_count, excluded_count, keypress
 
-def printing_histogram():
+def printing_histogram():#Printing the vertical histogram with a border
     global progress_count,trailing_count,retriver_count,excluded_count,student_count
     print(top_left_corner+horizontal*100+top_right_corner)
     print(vertical+"                                V E R T I C A L   H I S T O G R A M                                 "+vertical)
@@ -118,11 +118,18 @@ def printing_histogram():
     print(left_junction+horizontal*100+right_junction)
     print(vertical+"Total number of outcomes:",f'{student_count:02}',f'{vertical:>72}')
     print(bottom_left_corner+horizontal*100+bottom_right_corner)
+
 #MAIN PROGRAM
-try:
-    user_inputs()
-    if values_approved == True:
-        progress_outcome() 
-        add_or_exit_menu()
-except: 
-    print("Integers Required!")
+def main_program():
+    try:
+        user_inputs()
+        if values_approved == True:
+            progress_outcome() 
+            add_or_exit_menu()
+    except: 
+        print()
+        print("Integers Required!")
+        print()
+        main_program()
+
+main_program()

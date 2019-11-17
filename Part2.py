@@ -21,7 +21,7 @@ right_junction = "\u2563"
 left_junction = "\u2560"
 
 print(top_left_corner+horizontal*100+top_right_corner)
-print(vertical+"                P R O G R E S S I O N   O U T C O M E S  :  S T A F F  V E R S I O N                "+vertical)
+print(vertical+"   P R O G R E S S I O N   O U T C O M E S  :  S T A F F  V E R S I O N   ( H O R I Z O N T A L )   "+vertical)
 print(bottom_left_corner+horizontal*100+bottom_right_corner)
 print()
 
@@ -52,6 +52,7 @@ def user_inputs():#Functions to take inputs and count the number of students' cr
 
 def add_or_exit_menu():#Giving user the option of choosing to add another student's records or choosing to display the histogram
     global keypress,student_count,passed_credits,deferred_credits,failed_credits
+    print()
     while keypress == "N" or keypress == "n": #Since its case sensitive, both 'N' and 'n' are considered
         #add another student's data
         user_inputs()
@@ -60,34 +61,36 @@ def add_or_exit_menu():#Giving user the option of choosing to add another studen
         if keypress == "Q" or keypress == "q":#Since its case sensitive, both 'Q' and 'q' are considered
             printing_histogram()
         else:
+            print()
             print("Try again! Invalid Selection") #If neither 'Q' nor 'N' was selected, user has to input again
+            print()
             keypress = str(input("Enter 'Q' to quit or 'N' to add another student\t\t\t\t\t:"))
             add_or_exit_menu()
          
 
-def progress_outcome():
+def progress_outcome():#Student's progress outcome prediction is printed on the console
     global progress_count,trailing_count,retriver_count,excluded_count,keypress,student_count
     if passed_credits == 120: #Students who has passed all credits will progress
-        print("\t\tProgression outcome of student",student_count,":\tProgress")
+        print("\t\tProgression outcome of student",student_count,":\tP R O G R E S S ")
         print()
         progress_count +=1
     elif passed_credits == 100: #students who has only 100 credits with deferred or failed 20 credits will have a trailing module
-        print("\t\tProgression outcome of student",student_count,":\tProgress- Module trailer")
+        print("\t\tProgression outcome of student",student_count,":\tP R O G R E S S  -  M O D U L E  T R A I L E R ")
         print()
         trailing_count += 1
     elif passed_credits <= 80 and failed_credits < 80:#students who has less than or equal to 80 passed credits with less than 80 failed credits will not progress
-        print("\t\tProgression outcome of student",student_count,":\tDo not Progress- Module Retriever")
+        print("\t\tProgression outcome of student",student_count,":\tP R O G R E S S  -  M O D U L E  R E T R R I E V E R")
         print()
         retriver_count += 1
     elif failed_credits >= 80:#Students who has 80 or more failed credits will be excluded
-        print("\t\tProgression outcome of student",student_count,":\tExclude")
+        print("\t\tProgression outcome of student",student_count,":\tE X C L U D E ")
         print()
         excluded_count +=1
     print()
     keypress = str(input("Enter 'Q' to quit or 'N' to add another student\t\t\t\t\t:"))
     return progress_count, retriver_count, excluded_count, keypress
 
-def printing_histogram():
+def printing_histogram():#Printing the horizontal histogram with a border
     global progress_count,trailing_count,retriver_count,excluded_count,student_count
     p_count = 76-progress_count
     t_count = 76-trailing_count
@@ -112,10 +115,16 @@ def printing_histogram():
     print(bottom_left_corner+horizontal*100+bottom_right_corner)
 
 #MAIN PROGRAM
-try:
-    user_inputs()
-    if values_approved == True:
-        progress_outcome() 
-        add_or_exit_menu()
-except: 
-    print("Integers Required!")
+def main_program() :
+    try:
+        user_inputs()
+        if values_approved == True:
+            progress_outcome() 
+            add_or_exit_menu()
+    except:
+        print() 
+        print("Integers Required!")
+        print()
+        main_program()
+
+main_program()
