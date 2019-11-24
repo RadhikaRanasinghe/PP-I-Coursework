@@ -1,14 +1,18 @@
 #Declaring variables
 student_count = 0
-progress_count = 0 
-trailing_count = 0 
+progress_count = 0
+trailing_count = 0
 retriver_count = 0
 excluded_count = 0
 passed_credits = 0
 deferred_credits = 0
 failed_credits = 0
 total_credits = 0
-values_approved = False
+values_approved = None
+rs_progress_count = 0
+rs_trailing_count = 0
+rs_retriver_count = 0
+rs_excluded_count = 0
 
 #Unicode characters for creation of the table
 top_left_corner = "\u2554"
@@ -87,48 +91,35 @@ def user_inputs():#Functions to take inputs and count the number of students' cr
     total_credits = 0
     return passed_credits,deferred_credits,failed_credits,values_approved,student_count,total_credits
 
-def add_or_exit_menu():#Giving user the option of choosing to add another student's records or choosing to display the histogram
-    global keypress,student_count,passed_credits,deferred_credits,failed_credits
-    print()
-    while keypress == "N" or keypress == "n": #Since its case sensitive, both 'N' and 'n' are considered
-        #add another student's data
-        user_inputs()
-        progress_outcome()
-    else:
-        if keypress == "Q" or keypress == "q":#Since its case sensitive, both 'Q' and 'q' are considered
-            printing_histogram()
-        else:
-            print()
-            print("Try again! Invalid Selection") #If neither 'Q' nor 'N' was selected, user has to input again
-            print()
-            keypress = str(input("Enter 'Q' to quit or 'N' to add another student\t\t\t\t\t:"))
-            add_or_exit_menu()
-         
-
 def progress_outcome():#Student's progress outcome prediction is printed on the console
-    global progress_count,trailing_count,retriver_count,excluded_count,keypress,student_count
+    global progress_count,trailing_count,retriver_count,excluded_count,keypress,student_count,rs_progress_count,rs_trailing_count,rs_retriver_count,rs_excluded_count
     if passed_credits == 120: #Students who has passed all credits will progress
         print("\t\tProgression outcome of student",student_count,":\tP R O G R E S S ")
         print()
         progress_count +=1
+        rs_progress_count +=1
     elif passed_credits == 100: #students who has only 100 credits with deferred or failed 20 credits will have a trailing module
         print("\t\tProgression outcome of student",student_count,":\tP R O G R E S S  -  M O D U L E  T R A I L E R ")
         print()
         trailing_count += 1
+        rs_trailing_count += 1
     elif passed_credits <= 80 and (failed_credits < 80 or deferred_credits >=40):#students who has less than or equal to 80 passed credits with less than 80 failed credits will not progress
-        print("\t\tProgression outcome of student",student_count,":\tP R O G R E S S  -  M O D U L E  R E T R I E V E R")
+        print("\t\tProgression outcome of student",student_count,":\tP R O G R E S S  -  M O D U L E  R E T R R I E V E R")
         print()
         retriver_count += 1
+        rs_retriver_count +=1
     elif (failed_credits >= 80 or deferred_credits < 40):#Students who has 80 or more failed credits will be excluded
         print("\t\tProgression outcome of student",student_count,":\tE X C L U D E ")
         print()
         excluded_count +=1
+        rs_excluded_count +=1
     print()
     keypress = str(input("Enter 'Q' to quit or 'N' to add another student\t\t\t\t\t:"))
     return progress_count, retriver_count, excluded_count, keypress
 
-def printing_histogram():#Printing the horizontal histogram with a border
-    global progress_count,trailing_count,retriver_count,excluded_count,student_count
+
+def horizontal_histogram():#Printing the horizontal histogram with a border
+    global progress_count,trailing_count,retriver_count,excluded_count,student_count,rs_progress_count,rs_trailing_count,rs_retriver_count,rs_excluded_count
     p_count = 76-progress_count
     t_count = 76-trailing_count
     r_count = 76-retriver_count
@@ -151,15 +142,104 @@ def printing_histogram():#Printing the horizontal histogram with a border
     print(vertical+"Total number of students:   (",f'{student_count:02}',")"+f'{vertical:>67}')
     print(bottom_left_corner+horizontal*100+bottom_right_corner)
 
+def vertical_histogram():#Printing the vertical histogram with a border
+    global progress_count,trailing_count,retriver_count,excluded_count,student_count,rs_progress_count,rs_trailing_count,rs_retriver_count,rs_excluded_count
+    print(top_left_corner+horizontal*100+top_right_corner)
+    print(vertical+"                                V E R T I C A L   H I S T O G R A M                                 "+vertical)
+    print(left_junction+horizontal*100+right_junction)
+    print(vertical+f'{vertical:>101}')
+    print(vertical+"        Progress        ","        Trailing        ","        Retriever       ","        Excluded        ",vertical)
+    print(vertical+" "*100+vertical)
+    while progress_count!=0 or trailing_count !=0 or retriver_count !=0 or excluded_count !=0:
+        if progress_count > 0:
+            print(vertical+"           *    ",end="\t")
+            progress_count -=1
+        else:
+            print(vertical+"                ",end="\t")
+        if trailing_count > 0:
+            print("             *    ",end="\t")
+            trailing_count -=1
+        else:
+            print("                 ",end="\t")
+        if retriver_count > 0:
+            print("\t       *        ",end="\t")
+            retriver_count -=1
+        else:
+            print("\t                ",end="\t")
+        if excluded_count > 0:
+            print("       *            ",vertical,end="\n")
+            excluded_count -=1
+        else:
+            print("                    ",vertical,end="\n")
+    resetVar()
+    print(vertical+" "*100+vertical)
+    print(left_junction+horizontal*100+right_junction)
+    print(vertical+"Total number of outcomes:",f'{student_count:02}',f'{vertical:>72}')
+    print(bottom_left_corner+horizontal*100+bottom_right_corner)
+    return progress_count,trailing_count,retriver_count,excluded_count,student_count
+
+def add_or_exit_menu():#Giving user the option of choosing to add another student's records or choosing to display the histogram
+    global keypress,student_count,passed_credits,deferred_credits,failed_credits,rs_progress_count,rs_trailing_count,rs_retriver_count,rs_excluded_count
+    print()
+    while keypress == "N" or keypress == "n": #Since its case sensitive, both 'N' and 'n' are considered
+        #add another student's data
+        user_inputs()
+        progress_outcome()
+    else:
+        if keypress == "Q" or keypress == "q":#Since its case sensitive, both 'Q' and 'q' are considered
+            menu_histogram()
+        else:
+            print()
+            print("Try again! Invalid Selection") #If neither 'Q' nor 'N' was selected, user has to input again
+            print()
+            keypress = str(input("Enter 'Q' to quit or 'N' to add another student\t\t\t\t\t:"))
+            add_or_exit_menu()
+
+def menu_histogram():#Asking user input only for the choice of horizontal, vertical, or to quit
+    global progress_count,trailing_count,retriver_count,excluded_count,student_count,rs_progress_count,rs_trailing_count,rs_retriver_count,rs_excluded_count
+    histogram = str(input("Enter 'H' for a horizontal histogram, 'V' for vertical histogram or any other key to Quit\t:"))
+    if histogram == "H" or histogram == "h":
+        horizontal_histogram()
+        print()
+        another_histogram = str(input("Enter 'V' for another vertical histogram or any other key to Quit\t:"))
+        print()
+        if another_histogram == 'v' or another_histogram == 'V':
+            vertical_histogram()
+        else: 
+            print("Quiting.......")
+            pass
+    elif histogram == "V" or histogram == "v":
+        vertical_histogram()
+        print()
+        another_histogram = str(input("Enter 'H' for another horizontal histogram or any other key to Quit\t:"))
+        print()
+        if another_histogram == 'h' or another_histogram == 'H':
+            horizontal_histogram()
+        else:
+            print("Quiting.......")
+            pass
+    else:
+        print("Quiting.......")
+        pass
+
+def resetVar(): #Resetting variables for only when vertical histogram is asked before the horizontal histogram
+    global progress_count,trailing_count,retriver_count,excluded_count,rs_progress_count,rs_trailing_count,rs_retriver_count,rs_excluded_count
+    progress_count = rs_progress_count
+    trailing_count = rs_trailing_count
+    retriver_count = rs_retriver_count
+    excluded_count = rs_excluded_count
+    return progress_count,trailing_count,retriver_count,excluded_count
+
+
 #MAIN PROGRAM
-def main_program() :
+def main_program():
     try:
         user_inputs()
         if values_approved == True:
             progress_outcome() 
             add_or_exit_menu()
-    except:
-        print() 
+    except: 
+        print()
         print("Integers Required!")
         print()
         main_program()

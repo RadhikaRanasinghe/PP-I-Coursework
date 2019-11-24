@@ -135,7 +135,7 @@ def vertical_histogram():#Printing the vertical histogram with a border
             print("\t       *        ",end="\t")
             retriver_count -=1
         else:
-            print("\t       *        ",end="\t")
+            print("\t                ",end="\t")
         if excluded_count > 0:
             print("       *            ",vertical,end="\n")
             excluded_count -=1
