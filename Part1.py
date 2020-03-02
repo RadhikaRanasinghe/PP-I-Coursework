@@ -4,7 +4,7 @@ deferred_credits = 0
 failed_credits = 0
 total_credits = 0
 values_approved = False
-
+#comments
 #Unicode characters for creation of the table
 top_left_corner = "\u2554"
 top_right_corner = "\u2557"
